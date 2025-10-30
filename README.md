@@ -154,6 +154,56 @@ go build -o trader ./cmd/trader
 }
 ```
 
+### 切换AI提供商
+
+#### 从DeepSeek切换到通义千问
+
+##### 1. 修改配置文件
+```json
+{
+  "deepseek": {
+    "enabled": false  // 关闭DeepSeek
+  },
+  "qwen": {
+    "enabled": true,  // 启用通义千问
+    "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "model": "qwen-turbo",
+    "temperature": 0.4,
+    "topP": 0.8
+  }
+}
+```
+
+##### 2. 更新交易者配置
+修改每个交易者的`decisionProvider`字段：
+```json
+"traders": [
+  {
+    "name": "btc-alpha",
+    "exchange": "binance", 
+    "symbol": "BTCUSDT",
+    "interval": "1m",
+    "decisionProvider": "qwen",  // 改为qwen
+    "settings": {
+      "leverage": 5,
+      "orderQuantity": 0.00001
+    }
+  }
+]
+```
+
+##### 3. 设置通义千问API密钥
+通义千问需要双密钥认证：
+```json
+{
+  "qwen": {
+    "enabled": true,
+    "apiKey": "your_qwen_api_key",      // API密钥
+    "secretKey": "your_qwen_secret_key"  // 秘密密钥
+  }
+}
+```
+
 ## 🎯 交易策略
 
 ### 混合订单策略
