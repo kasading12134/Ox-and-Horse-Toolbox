@@ -212,17 +212,6 @@ data/
 
 本项目采用MIT许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
-## 🙏 致谢
-
-- [DeepSeek](https://www.deepseek.com/) - 提供强大的AI决策能力
-- [Binance](https://www.binance.com/) - 提供稳定的交易API
-- [Go语言](https://golang.org/) - 提供高性能的并发框架
-- [@Web3Tinkle](https://x.com/Web3Tinkle) - 感谢技术指导和架构设计支持
-
----
-
-**提示**: 交易有风险，投资需谨慎。本工具仅提供技术实现，不构成投资建议。
-
 ## 🔄 切换AI提供商
 
 ### 从DeepSeek切换到通义千问
