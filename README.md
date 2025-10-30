@@ -204,114 +204,6 @@ go build -o trader ./cmd/trader
 }
 ```
 
-## 🎯 交易策略
-
-### 混合订单策略
-- **进场**: 市价单 - 确保快速成交，不错过机会
-- **止损**: 市价单 - 触发时立即平仓，严格控制损失
-- **止盈**: 市价单 - 达到目标时平仓，锁定利润
-
-### 风险控制规则
-- 单笔风险: ≤1% 账户净值
-- 每日最大亏损: ≤5% 账户净值
-- 最大并发持仓: 3个交易对
-- 最小风险回报比: 1:3
-
-## 📈 性能指标
-
-- **决策速度**: 平均响应时间 < 30秒
-- **token消耗**: 约3500 tokens/请求（系统500+用户3000）
-- **重试机制**: 3次智能重试，指数退避
-- **错误处理**: 网络错误自动重试，业务错误立即返回
-
-## 🔍 监控与日志
-
-### 日志文件
-```
-logs/
-├── ai.deepseek.log      # DeepSeek决策日志
-├── main.log             # 主程序日志
-├── risk.log             # 风控日志
-└── trader.*.log         # 各交易对日志
-```
-
-### 数据持久化
-```
-data/
-├── decisions.jsonl      # AI决策记录
-└── trades.jsonl         # 交易执行记录
-```
-
-## 🚨 安全警告
-
-⚠️ **重要安全提示**: 
-- 不要将包含真实API密钥的`config.json`上传到GitHub
-- 使用`.gitignore`保护敏感配置文件
-- 定期轮换API密钥，限制交易权限
-- 始终先在模拟模式下测试策略
-
-## 🤝 贡献指南
-
-1. Fork本项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 打开Pull Request
-
-## 📄 许可证
-
-本项目采用MIT许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
-
-## 🔄 切换AI提供商
-
-### 从DeepSeek切换到通义千问
-
-#### 1. 修改配置文件
-```json
-{
-  "deepseek": {
-    "enabled": false  // 关闭DeepSeek
-  },
-  "qwen": {
-    "enabled": true,  // 启用通义千问
-    "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    "model": "qwen-turbo",
-    "temperature": 0.4,
-    "topP": 0.8
-  }
-}
-```
-
-#### 2. 更新交易者配置
-修改每个交易者的`decisionProvider`字段：
-```json
-"traders": [
-  {
-    "name": "btc-alpha",
-    "exchange": "binance", 
-    "symbol": "BTCUSDT",
-    "interval": "1m",
-    "decisionProvider": "qwen",  // 改为qwen
-    "settings": {
-      "leverage": 5,
-      "orderQuantity": 0.00001
-    }
-  }
-]
-```
-
-#### 3. 设置通义千问API密钥
-通义千问需要双密钥认证：
-```json
-{
-  "qwen": {
-    "enabled": true,
-    "apiKey": "your_qwen_api_key",      // API密钥
-    "secretKey": "your_qwen_secret_key"  // 秘密密钥
-  }
-}
-```
-
 ### 通义千问特性
 
 #### ✅ 优势
@@ -377,7 +269,7 @@ data/
 # 测试通义千问连接
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1 \
   -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
+  -H "Content-Type": "application/json" \
   -d '{"model":"qwen-turbo","messages":[{"role":"user","content":"test"}]}'
 ```
 
@@ -392,9 +284,57 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1 \
 | 配置复杂度 | 🔧 简单 | 🔧 中等 |
 
 通过以上配置，您可以轻松在DeepSeek和通义千问之间切换，选择最适合您需求的AI提供商。
+## 🎯 交易策略
+
+### 混合订单策略
+- **进场**: 市价单 - 确保快速成交，不错过机会
+- **止损**: 市价单 - 触发时立即平仓，严格控制损失
+- **止盈**: 市价单 - 达到目标时平仓，锁定利润
+
+### 风险控制规则
+- 单笔风险: ≤1% 账户净值
+- 每日最大亏损: ≤5% 账户净值
+- 最大并发持仓: 3个交易对
+- 最小风险回报比: 1:3
+
+## 📈 性能指标
+
+- **决策速度**: 平均响应时间 < 30秒
+- **token消耗**: 约3500 tokens/请求（系统500+用户3000）
+- **重试机制**: 3次智能重试，指数退避
+- **错误处理**: 网络错误自动重试，业务错误立即返回
+
+## 🔍 监控与日志
+
+### 日志文件
+```
+logs/
+├── ai.deepseek.log      # DeepSeek决策日志
+├── main.log             # 主程序日志
+├── risk.log             # 风控日志
+└── trader.*.log         # 各交易对日志
+```
+
+### 数据持久化
+```
+data/
+├── decisions.jsonl      # AI决策记录
+└── trades.jsonl         # 交易执行记录
+```
+
+## 🚨 安全警告
+
+⚠️ **重要安全提示**: 
+- 不要将包含真实API密钥的`config.json`上传到GitHub
+- 使用`.gitignore`保护敏感配置文件
+- 定期轮换API密钥，限制交易权限
+- 始终先在模拟模式下测试策略
+
+## 📄 许可证
+
+本项目采用MIT许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
 ## 🙏 致谢
-
 - [DeepSeek](https://www.deepseek.com/) - 提供强大的AI决策能力
 - [Binance](https://www.binance.com/) - 提供稳定的交易API
 - [Go语言](https://golang.org/) - 提供高性能的并发框架
