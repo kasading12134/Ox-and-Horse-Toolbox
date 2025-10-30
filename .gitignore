@@ -1,0 +1,8 @@
+config.json
+data/*.jsonl
+logs/*.log
+.env
+
+# Go 构建缓存 & 可执行文件
+.gocache/
+trader

@@ -1,0 +1,118 @@
+{
+  "global": {
+    "evaluationInterval": "5m",
+    "scanIntervalMinutes": 5,
+    "dryRun": true,
+    "defaults": {
+      "contractType": "PERPETUAL",
+      "leverage": 5,
+      "orderQuantity": 0.001,
+      "riskPerTradePercent": 1.0,
+      "stopLossPercent": 0.6,
+      "takeProfitPercent": 1.2,
+      "trailingStopPercent": 0.4,
+      "maxExposurePercent": 5.0,
+      "slippagePercent": 0.05,
+      "lookbackCandles": 180,
+      "learningWindow": 80,
+      "fastEmaPeriod": 12,
+      "slowEmaPeriod": 26,
+      "rsiPeriod": 14,
+      "rsiUpper": 55,
+      "rsiLower": 45,
+      "macdFastPeriod": 12,
+      "macdSlowPeriod": 26,
+      "macdSignalPeriod": 9
+    }
+  },
+  "traders": [
+    {
+      "name": "btc-alpha",
+      "exchange": "binance",
+      "symbol": "BTCUSDT",
+      "interval": "1m",
+      "decisionProvider": "deepseek",
+      "settings": {
+        "learningWindow": 120,
+        "candidateSymbols": ["ETHUSDT", "SOLUSDT"]
+      }
+    },
+    {
+      "name": "eth-swing",
+      "exchange": "binance",
+      "symbol": "ETHUSDT",
+      "interval": "5m",
+      "decisionProvider": "qwen",
+      "settings": {
+        "leverage": 3,
+        "riskPerTradePercent": 0.8,
+        "maxExposurePercent": 3.0,
+        "fastEmaPeriod": 8,
+        "slowEmaPeriod": 21,
+        "rsiUpper": 60,
+        "rsiLower": 40
+      }
+    }
+  ],
+  "deepseek": {
+    "enabled": true,
+    "baseUrl": "https://api.deepseek.com",
+    "model": "deepseek-chat",
+    "temperature": 0.3,
+    "topP": 0.9,
+    "maxTokens": 2000,
+    "apiKey": "YOUR_DEEPSEEK_API_KEY"
+  },
+  "qwen": {
+    "enabled": false,
+    "baseUrl": "https://dashscope.aliyuncs.com",
+    "model": "qwen-turbo",
+    "temperature": 0.4,
+    "topP": 0.8,
+    "apiKey": "YOUR_QWEN_API_KEY",
+    "secretKey": "YOUR_QWEN_SECRET_KEY"
+  },
+  "news": {
+    "enabled": true,
+    "provider": "blockbeats",
+    "apiUrl": "https://api.blockbeats.cn/v2/newsflash/list?page=1&limit=20&ios=-2&detective=1",
+    "blockbeatsDisabled": false,
+    "apiKey": "",
+    "maxItems": 20,
+    "lookback": "2h",
+    "cacheTtl": "2m"
+  },
+  "coinPool": {
+    "use_default_coins": true,
+    "coin_pool_api_url": "",
+    "coin_pool_api_key": "",
+    "oi_top_api_url": "",
+    "oi_top_api_key": "",
+    "cache_ttl": "5m",
+    "max_combined": 24
+  },
+  "risk": {
+    "maxDailyLossPercent": 5.0,
+    "maxPositionNotionalUsd": 2000.0,
+    "maxConcurrentPositions": 3,
+    "checkInterval": "5m",
+    "maxLeverage": 5,
+    "btcEthNotionalMultiple": 10,
+    "altNotionalMultiple": 1.5,
+    "minRiskRewardRatio": 3
+  },
+  "storage": {
+    "type": "file",
+    "path": "data"
+  },
+  "logging": {
+    "directory": "logs",
+    "mirrorStdout": true
+  },
+  "exchanges": {
+    "binance": {
+      "apiKey": "YOUR_API_KEY",
+      "apiSecret": "YOUR_SECRET"
+    }
+  }
+}
